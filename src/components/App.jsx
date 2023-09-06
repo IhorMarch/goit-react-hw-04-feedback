@@ -1,60 +1,87 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import { FeedbackForm } from './FeedbackForm/FeedbackForm';
 import { Section } from './Section/Section';
 import { Statistic } from './Statistic/Statistic';
 import { Message } from './Message/Message';
 import { GlobalStyle } from './GlobalStyle';
 
-export class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  } 
+
+// const getIntialFeedbacks = () => {
+//   const savedFeedback = localStorage.getItem('feedbacks');
+//   if (savedFeedback !== null) {
+//     return JSON.parse(savedFeedback);
+//   }
+//     return {
+      
+        
+//         good: 0,
+//         neutral: 0,
+//         bad: 0,
+
+   
+    
+//   };
+// };
 
 
 
-  leaveFeedback = option => {
+const INITIAL_STATE = {
+  good: 0,
+  neutral: 0,
+  bad: 0,
+};
 
-    this.setState(prevState => ({
-    [option]: prevState[option] + 1,
+export const App = () => { 
 
+    const [feedbacks, Setfeedbacks] = useState(INITIAL_STATE);
+    
+
+    const leaveFeedbacks = key  => {
+    Setfeedbacks(prevFeedbacks=> ({
+     ...prevFeedbacks,
+      [key]: prevFeedbacks[key]+1,
     }));
   };
 
-   totalFeedback = () => {
-     const total = this.state.good + this.state.neutral + this.state.bad
+
+    const totalFeedback = () => {
+       
+     const total = feedbacks.good + feedbacks.neutral + feedbacks.bad
 
     return total
-  };
- positiveFeedback = () => {
-   const positive = Math.round((this.state.good / this.totalFeedback()) * 100 )|| 0;
+    };
+    
+ const positiveFeedback = () => {
+   const positive = Math.round((feedbacks.good / totalFeedback()) * 100 )|| 0;
   
     return positive
   };
-  render() {
-    const options = Object.keys(this.state);
+
+    const options = Object.keys(feedbacks);
+
     
-    return (
+
+ return (
+     
       <div>
 
       <Section title="Please leave feedback">
           
           <FeedbackForm
-            leaveFeedback={this.leaveFeedback}
+            leaveFeedback={leaveFeedbacks}
             options={options} />
           
       </Section>
     
-        
+
         <Section title="Statistics">
-          {this.totalFeedback() !== 0 ?
+          {totalFeedback() !== 0 ?
             (<Statistic
-            good={this.state.good}
-            bad={this.state.bad}
-            neutral={this.state.neutral}
-            total={this.totalFeedback()}
-            positive={this.positiveFeedback()}
+            good={feedbacks.good}
+            bad={feedbacks.bad}
+            neutral={feedbacks.neutral}
+            total={totalFeedback()}
+            positive={positiveFeedback()}
           />):(<Message message="There is no feedback"/> )
         
         }
@@ -64,5 +91,8 @@ export class App extends Component {
         <GlobalStyle/>
       </div>
   );
-};
+    
+    
+    
+
 }

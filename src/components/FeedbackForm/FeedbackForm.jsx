@@ -10,7 +10,7 @@ export const FeedbackForm = ({options,leaveFeedback}) => {
         <List>
             {options.map(option => (
                 
-                <FeedBackBtns option={option} leaveFeedback={leaveFeedback} />
+                <FeedBackBtns key={option} option={option} leaveFeedback={leaveFeedback} />
             ))}
               
         </List>
